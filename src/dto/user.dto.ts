@@ -1,19 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { body, validationResult } from "express-validator";
-
-const handleValidationError = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	const errors = validationResult(req);
-
-	if (errors.isEmpty()) {
-		return res.status(400).json({ errors: errors.array() });
-	}
-
-	next();
-};
+import { body } from "express-validator";
+import { handleValidationError } from "../middlewares/validation.middleware";
 
 export const validatedMyUserRequest = [
 	body("name").isString().notEmpty().withMessage("Name must be a string"),
@@ -23,4 +9,5 @@ export const validatedMyUserRequest = [
 		.withMessage("AddressLine1 must be a string"),
 	body("country").isString().notEmpty().withMessage("Country must be a string"),
 	body("city").isString().notEmpty().withMessage("City must be a string"),
+	handleValidationError,
 ];
